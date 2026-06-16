@@ -1,0 +1,74 @@
+version: '3.8'
+
+services:
+  stackrecon-db:
+    image: postgres:15
+    container_name: stackrecon_db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: stackrecon
+    ports:
+      - "5433:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - internal-net
+
+  stackrecon-pgadmin:
+    image: dpage/pgadmin4
+    container_name: stackrecon_pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "5051:80"
+    depends_on:
+      - stackrecon-db
+    networks:
+      - internal-net
+
+  stackrecon-backend:
+    build:
+      context: .
+      dockerfile: backend.Dockerfile
+    container_name: stackrecon_backend
+    environment:
+      - DATABASE_URL=postgres://postgres:password@stackrecon-db:5432/stackrecon
+      - PORT=8080
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+    ports:
+      - "8081:8080"
+    depends_on:
+      - stackrecon-db
+    networks:
+      - internal-net
+      - caddy-net
+
+  stackrecon-frontend:
+    build:
+      context: ./web
+      dockerfile: frontend.Dockerfile
+      args:
+        - NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
+        - NEXT_PUBLIC_LOGO_DEV_TOKEN=${NEXT_PUBLIC_LOGO_DEV_TOKEN}
+        - ACTIVE_THRESHOLD_DAYS=${ACTIVE_THRESHOLD_DAYS}
+    container_name: stackrecon_frontend
+    environment:
+      - NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
+      - NEXT_PUBLIC_LOGO_DEV_TOKEN=${NEXT_PUBLIC_LOGO_DEV_TOKEN}
+      - ACTIVE_THRESHOLD_DAYS=${ACTIVE_THRESHOLD_DAYS}
+    ports:
+      - "3001:3000"
+    depends_on:
+      - stackrecon-backend
+    networks:
+      - caddy-net
+
+volumes:
+  pgdata:
+
+networks:
+  caddy-net:
+    external: true
+  internal-net:

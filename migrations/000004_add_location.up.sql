@@ -1,0 +1,1 @@
+ALTER TABLE job_posting ADD COLUMN IF NOT EXISTS location TEXT NULL;

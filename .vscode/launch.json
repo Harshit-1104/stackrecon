@@ -1,0 +1,62 @@
+{
+    "configurations": [
+        {
+            "name": "Launch scraper",
+            "type": "go",
+            "request": "launch",
+            "mode": "debug",
+            "program": "${workspaceFolder}/cmd/scraper/main.go",
+            "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "name": "Launch extractor",
+            "type": "go",
+            "request": "launch",
+            "mode": "debug",
+            "program": "${workspaceFolder}/cmd/extractor/main.go",
+            "envFile": "${workspaceFolder}/.env",
+            "args": [
+                "--input-dir",
+                "/Users/zoro/go/src/github.com/stackrecon/data/processed/tech"
+            ]
+        },
+        {
+            "name": "Canonicalize",
+            "type": "go",
+            "request": "launch",
+            "mode": "debug",
+            "program": "${workspaceFolder}/cmd/canonicalize/main.go",
+            "envFile": "${workspaceFolder}/.env",
+            "args": [
+                "--input-dir",
+                "/Users/zoro/go/src/github.com/stackrecon/data/reextracted/tech",
+                "--alias-map",
+                "/Users/zoro/go/src/github.com/stackrecon/data/alias_map.json",
+                "--seeds",
+                "/Users/zoro/go/src/github.com/stackrecon/data/canonical_seeds.json",
+                "--blocklist",
+                "/Users/zoro/go/src/github.com/stackrecon/data/skill_blocklist.json",
+                "--resolved-blocklist",
+                "/Users/zoro/go/src/github.com/stackrecon/data/skill_blocklist_resolved.json",
+                "--print-unresolved",
+                "true",
+                "--workers",
+                "10",
+            ]
+        },
+        {
+            "name": "Launch api server",
+            "type": "go",
+            "request": "launch",
+            "mode": "debug",
+            "program": "${workspaceFolder}/cmd/api/main.go",
+            "envFile": "${workspaceFolder}/.env",
+            "args": [
+                "--alias-map",
+                "/Users/zoro/go/src/github.com/stackrecon/data/alias_map.json",
+                "--blocklist",
+                "/Users/zoro/go/src/github.com/stackrecon/data/skill_blocklist_resolved.json"
+            ]
+        }
+    ]
+}

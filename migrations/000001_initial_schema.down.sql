@@ -1,0 +1,13 @@
+DROP TABLE IF EXISTS role_type_skill_frequency;
+DROP TABLE IF EXISTS company_skill_signal;
+DROP TABLE IF EXISTS job_posting_skill;
+DROP TABLE IF EXISTS job_posting;
+DROP TABLE IF EXISTS role_type;
+DROP TABLE IF EXISTS company_source;
+DROP TABLE IF EXISTS company;
+DROP TABLE IF EXISTS user_skill;
+DROP TABLE IF EXISTS "user";
+DROP TABLE IF EXISTS skill_co_occurrence;
+DROP TABLE IF EXISTS skill_alias;
+DROP TABLE IF EXISTS skill;
+DROP TABLE IF EXISTS skill_category;

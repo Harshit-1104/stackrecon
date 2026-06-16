@@ -1,0 +1,14 @@
+.env
+.env.*
+!.env.example
+.git
+.gitignore
+*.md
+docker-compose.yml
+node_modules/
+.next/
+*.log
+tmp/
+*.swp
+.vscode/
+data/analysis/
