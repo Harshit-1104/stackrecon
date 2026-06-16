@@ -539,7 +539,7 @@ export default function CompanyProfilePage({ params }: { params: Promise<{ id: s
           <div className="absolute inset-0" onClick={() => setIsUploadModalOpen(false)} />
           <div className="relative bg-bg-surface border border-border w-full max-w-2xl rounded-2xl shadow-md p-8">
             <h2 className="text-2xl font-bold mb-2 text-text-primary">Upload Resume</h2>
-            <p className="text-text-secondary mb-6">Let Gemini extract your skills to personalize your matches.</p>
+            <p className="text-text-secondary mb-6">Extracting your skills to personalize your matches.</p>
             <ResumeDropzone 
               onSuccess={handleResumeSuccess} 
               onError={(err: any) => alert(err)} 

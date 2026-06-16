@@ -48,7 +48,7 @@ export function ResumeDropzone({ onSuccess, onError }: ResumeDropzoneProps) {
         <>
           <Loader2 className="animate-spin text-accent mb-4" size={40} />
           <p className="text-text-primary font-medium">Parsing your stack...</p>
-          <p className="text-sm text-text-tertiary mt-2">Extracting skills using Gemini</p>
+          <p className="text-sm text-text-tertiary mt-2">Extracting skills</p>
         </>
       ) : (
         <>
