@@ -6,10 +6,8 @@ services:
     container_name: stackrecon_db
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: password
+      POSTGRES_PASSWORD: SrQ_stackrecon_secure_91!
       POSTGRES_DB: stackrecon
-    ports:
-      - "5433:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
     networks:
@@ -34,7 +32,7 @@ services:
       dockerfile: backend.Dockerfile
     container_name: stackrecon_backend
     environment:
-      - DATABASE_URL=postgres://postgres:password@stackrecon-db:5432/stackrecon
+      - DATABASE_URL=postgres://postgres:SrQ_stackrecon_secure_91!@stackrecon-db:5432/stackrecon
       - PORT=8080
       - GEMINI_API_KEY=${GEMINI_API_KEY}
     ports:
