@@ -221,7 +221,12 @@ func processJob(ctx context.Context, client *genai.Client, limiter *rate.Limiter
 		depts = append(depts, d.Name)
 	}
 
-	cleaned := prepareContent(job.Content)
+	var cleaned string
+	if job.CleanedContent != "" {
+		cleaned = job.CleanedContent
+	} else {
+		cleaned = prepareContent(job.Content)
+	}
 	prompt := fmt.Sprintf(getPromptTemplate(), cleaned)
 
 	var extractedSkills []models.Skill
@@ -373,14 +378,7 @@ func prepareContent(raw string) string {
 	s = reSpace.ReplaceAllString(s, " ")
 	cleaned := strings.TrimSpace(s)
 
-	const maxLen = 8000
-	if len(cleaned) <= maxLen {
-		return cleaned
-	}
-	
-	first := cleaned[:1000]
-	last := cleaned[len(cleaned)-7000:]
-	return first + "\n...\n" + last
+	return cleaned
 }
 
 func dataLogsDir() string {
@@ -423,6 +421,17 @@ Skill extraction rules:
   any one satisfies the requirement
 - If the same technology appears under two names (e.g. "GCP" and
   "Google Cloud Platform"), include only the canonical form: "GCP"
+- When alternatives are listed explicitly (e.g. "FastAPI, Django, or Flask" /
+  "React, Angular, or Vue.js"), mark all as "mentioned" not "required" —
+  any one satisfies the requirement
+- Do NOT extract from open-ended example lists that illustrate a generic
+  category using "etc.", "e.g.", or "such as" (e.g. "a backend language
+  (Go, Java, Python, etc.)", "a major cloud provider, e.g. AWS or Azure").
+  These name the category, not a fixed requirement — extract zero skills
+  from them.
+- Only CLOSED lists — a complete, fixed set of named alternatives with no
+  "etc."/"e.g." (e.g. "FastAPI, Django, or Flask") — follow the "mentioned"
+  rule above.
 
 Also extract:
 "min_years_required": integer or null
@@ -470,6 +479,17 @@ Nice to have: Docker, Kubernetes.
 Output:
 {"is_tech":true,"min_years_required":null,"skills":[{"name":"Python","requirement_level":"required"},{"name":"FastAPI","requirement_level":"mentioned"},{"name":"Django","requirement_level":"mentioned"},{"name":"Flask","requirement_level":"mentioned"},{"name":"React","requirement_level":"required"},{"name":"TypeScript","requirement_level":"required"},{"name":"Azure","requirement_level":"mentioned"},{"name":"GCP","requirement_level":"mentioned"},{"name":"Docker","requirement_level":"preferred"},{"name":"Kubernetes","requirement_level":"preferred"}]}
 
+Input:
+"""
+Software Engineer | Example Co | Engineering
+Required: proficiency in a backend language (Go, Java, Python, etc.) and
+experience with a major cloud provider (AWS, Azure, GCP, etc.).
+Must have hands-on experience with FastAPI, Django, or Flask.
+"""
+Output:
+{"is_tech":true,"min_years_required":null,"skills":[{"name":"FastAPI","requirement_level":"mentioned"},{"name":"Django","requirement_level":"mentioned"},{"name":"Flask","requirement_level":"mentioned"}]}
+
 Job Description:
-%s`
+%s
+`
 }

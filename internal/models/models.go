@@ -18,6 +18,7 @@ type GreenhouseJob struct {
 	UpdatedAt      string       `json:"updated_at"`
 	Departments    []Department `json:"departments"`
 	Content        string       `json:"content"`
+	CleanedContent string       `json:"cleaned_content"`
 }
 
 type Skill struct {

@@ -9,6 +9,20 @@
             "envFile": "${workspaceFolder}/.env"
         },
         {
+            "name": "Launch cleanup",
+            "type": "go",
+            "request": "launch",
+            "mode": "debug",
+            "program": "${workspaceFolder}/cmd/cleanup/boilerplate.go",
+            "envFile": "${workspaceFolder}/.env",
+            "args": [
+                "--alias-map",
+                "/Users/zoro/go/src/github.com/stackrecon/data/alias_map.json",
+                "--input-dir",
+                "/Users/zoro/go/src/github.com/stackrecon/data/processed/tech"
+            ]
+        },
+        {
             "name": "Launch extractor",
             "type": "go",
             "request": "launch",
